@@ -1,0 +1,49 @@
+{
+    "version": "0.1.0.2",
+    "description": "Share a keyboard, mouse and clipboard between Windows and Linux computers.",
+    "homepage": "https://github.com/li-sky/ununifying_kboard_share",
+    "license": "MIT",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/li-sky/scoop-bucket/releases/download/kbshare-v0.1.0.2/kbshare-0.1.0.2-windows-x64.zip",
+            "hash": "e7e49b55ae550469a1cedd870e509aaa0cde15a993661f218e5a1f3941812a31"
+        }
+    },
+    "bin": [
+        "kbshare.cmd",
+        "kbshare-config.cmd"
+    ],
+    "shortcuts": [
+        [
+            "kbshare.exe",
+            "kbshare",
+            "--config \"$dir\\data\\config.json\""
+        ],
+        [
+            "kbshare-config.exe",
+            "kbshare Configuration",
+            "\"$dir\\data\\config.json\" \"kbshare\""
+        ]
+    ],
+    "persist": "data",
+    "checkver": {
+        "url": "https://api.github.com/repos/li-sky/scoop-bucket/releases/latest",
+        "jsonpath": "$.tag_name",
+        "regex": "kbshare-v([\\d.]+)"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/li-sky/scoop-bucket/releases/download/kbshare-v$version/kbshare-$version-windows-x64.zip",
+                "hash": {
+                    "url": "$url.sha256"
+                }
+            }
+        }
+    },
+    "notes": [
+        "Run kbshare to open first-run setup, or kbshare-config to edit configuration.",
+        "Settings, certificates, trust and logs are preserved in the Scoop persist/kbshare/data directory.",
+        "Exit kbshare from its tray menu before updating."
+    ]
+}
