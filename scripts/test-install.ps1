@@ -13,6 +13,7 @@ $env:SCOOP = Join-Path $env:RUNNER_TEMP 'scoop'
 $scoopRoot = Join-Path $env:SCOOP 'apps/scoop/current'
 git clone --depth 1 https://github.com/ScoopInstaller/Scoop.git $scoopRoot
 if ($LASTEXITCODE) { throw 'Cannot fetch Scoop' }
+New-Item -ItemType Directory -Force "$env:SCOOP/shims", "$env:SCOOP/buckets" | Out-Null
 $scoop = Join-Path $scoopRoot 'bin/scoop.ps1'
 & $scoop config aria2-enabled false
 $archive = "dist/kbshare-$Version-windows-x64.zip"
@@ -29,7 +30,7 @@ try {
         } catch { Start-Sleep -Milliseconds 500 }
     }
     if (!$ready) { throw 'Local package server failed to start' }
-    & $scoop install "$root/.test/kbshare.json"
+    & $scoop install --no-update-scoop "$root/.test/kbshare.json"
     $installed = Join-Path $env:SCOOP 'apps/kbshare/current'
     foreach ($name in 'kbshare.exe', 'kbshare-config.exe', 'kbshare.cmd', 'kbshare-config.cmd', 'data/config.json') {
         if (!(Test-Path "$installed/$name")) { throw "Missing installed file: $name" }
@@ -57,7 +58,7 @@ try {
     & $scoop uninstall kbshare
     if (Test-Path $installed) { throw 'Scoop uninstall failed' }
     if (!(Test-Path "$persist/certs/marker.txt")) { throw 'Uninstall lost persistent data' }
-    & $scoop install "$root/.test/kbshare.json"
+    & $scoop install --no-update-scoop "$root/.test/kbshare.json"
     if ((Get-FileHash "$installed/data/config.json").Hash -ne $configHash) { throw 'Reinstall overwrote user config' }
     if (!(Test-Path "$installed/data/certs/marker.txt")) { throw 'Reinstall lost certificate directory' }
     Write-Host 'PASS: schema, Scoop install, executable, shims, shortcuts and persistence across reinstall.'
