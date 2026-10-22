@@ -48,18 +48,12 @@ xiaohe-shuangpin -Mode Restore
 普通卸载会保留输入法设置和备份；如需还原，请先恢复再卸载。
 如果输入法未刷新，切换输入法或注销重新登录。注册表来源和手动使用方法见[项目说明](https://github.com/li-sky/xiaohe-shuangpin-windows)。
 
-## kbshare 构建与维护
+## kbshare 版本与维护
 
-上游尚无正式 Release，因此本 bucket 从上游 Rust `v2` 分支构建并在本仓库发布 Windows x64 安装包。**不包含任何本地未提交修改**。
-每个 Release 记录准确的上游 commit；版本为 `<上游 Cargo 版本>.<Actions run number>`，末位是 bucket 构建号。
+直接使用 [kbshare 主仓库的正式 Release](https://github.com/li-sky/ununifying_kboard_share/releases) 中的 Windows x64 安装包，Scoop 版本与上游版本保持一致。
+`bucket/kbshare.json` 的 `checkver` / `autoupdate` 指向主仓库，校验值来自其 `SHA256SUMS`。
+这些字段供维护者的 Scoop 更新工具使用；用户安装的版本以本仓库已提交的清单为准。
 
-在 Actions 中手动运行 **Publish kbshare**，填写上游分支、tag 或 commit（默认 `v2`）：
-
-```sh
-gh workflow run publish-kbshare.yml -R li-sky/scoop-bucket -f source_ref=v2
-```
-
-流程构建主程序和配置编辑器，计算 SHA-256，使用真实 Scoop 验证安装、快捷方式与卸载重装后的持久化，然后发布 Release 并更新 `bucket/kbshare.json`。安装包不包含示例证书或私钥；每台机器自行生成身份。
-清单提供 `checkver` / `autoupdate` 元数据。发布流程本身负责提交清单，无需额外 token 或定时任务。
-
-kbshare 的许可证按上游 `Cargo.toml` 声明为 MIT。
+安装钩子仅创建启动命令和初始配置，沿用 `persist/kbshare/data` 保存用户数据。
+此前的 `0.1.0.2` 是上游尚无正式 Release 时的临时版本：`0.1.0` 为源码版本，`.2` 是构建流水线序号。旧安装可直接升级到 `1.0.1`，升级前请退出 kbshare。
+本仓库不再重复构建或发布 kbshare 安装包。
