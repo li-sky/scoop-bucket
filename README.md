@@ -1,8 +1,11 @@
 # li-sky Scoop bucket
 
-Windows x64 的个人 Scoop 软件源，目前包含 [kbshare](https://github.com/li-sky/ununifying_kboard_share)：跨 Windows / Linux 共享键盘、鼠标和剪贴板。
+个人 Scoop 软件源，目前包含：
 
-## 安装
+- [kbshare](https://github.com/li-sky/ununifying_kboard_share)：Windows x64 客户端，跨 Windows / Linux 共享键盘、鼠标和剪贴板。
+- [xiaohe-shuangpin](https://github.com/li-sky/xiaohe-shuangpin-windows)：为 Windows 10/11 微软拼音自动导入并启用小鹤双拼。
+
+## kbshare 安装
 
 先安装 [Scoop](https://scoop.sh/)，然后在 PowerShell 中运行：
 
@@ -26,7 +29,25 @@ scoop update kbshare
 `kbshare` 不带参数时使用此目录的配置；传入参数时原样交给程序，例如 `kbshare --config C:\my-config\config.json`。
 `kbshare-config` 不带参数时编辑持久化配置，也可传入其他配置路径。
 
-## 构建与维护
+## 小鹤双拼安装
+
+添加本源后执行：
+
+```powershell
+scoop install li-sky/xiaohe-shuangpin
+```
+
+安装时自动导入当前用户的微软拼音注册表设置，并启用小鹤双拼；需要已添加微软拼音输入法，不需要管理员权限，不支持全局安装。
+首次安装会备份被修改的三个值，更新与重装不会覆盖原备份。恢复安装前设置：
+
+```powershell
+xiaohe-shuangpin -Mode Restore
+```
+
+普通卸载会保留输入法设置和备份；如需还原，请先恢复再卸载。
+如果输入法未刷新，切换输入法或注销重新登录。注册表来源和手动使用方法见[项目说明](https://github.com/li-sky/xiaohe-shuangpin-windows)。
+
+## kbshare 构建与维护
 
 上游尚无正式 Release，因此本 bucket 从上游 Rust `v2` 分支构建并在本仓库发布 Windows x64 安装包。**不包含任何本地未提交修改**。
 每个 Release 记录准确的上游 commit；版本为 `<上游 Cargo 版本>.<Actions run number>`，末位是 bucket 构建号。
